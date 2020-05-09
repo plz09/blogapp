@@ -6,6 +6,7 @@
   const app = express();
   const admin = require("./routes/admin");
   const path = require("path");
+  const mongoose = require("mongoose");
   //const mongoose = require('mongoose');
   
   
@@ -20,11 +21,20 @@
     app.set('view engine', 'handlebars');
 
   //Mongoose
-   // Em breve
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost/blogapp').then(() => {
+      console.log("Conectado ao Mongo")
+    }).catch((err) => {
+      console.log("Erro ao se conectar: " + err)
+    })
 
   //Public
     app.use(express.static(path.join(__dirname, "public")));
 
+    app.use((req, res, next) => {
+      console.log("Eu sou um middleware");
+      next();
+    })
 
 //Rotas
 
