@@ -5,6 +5,7 @@
   const bodyParser = require('body-parser');
   const app = express();
   const admin = require("./routes/admin");
+  const path = require("path");
   //const mongoose = require('mongoose');
   
   
@@ -20,6 +21,9 @@
 
   //Mongoose
    // Em breve
+
+  //Public
+    app.use(express.static(path.join(__dirname, "public")));
 
 
 //Rotas
