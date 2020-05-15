@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.3",
     "connect-flash": "^0.1.1",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "handlebars": "^4.5.3"
+    "express-session": "^1.17.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "handlebars": "^4.5.0",
+    "nodemon": "^2.0.4"
   }
 }

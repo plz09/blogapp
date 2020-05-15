@@ -1,7 +1,9 @@
 //Carregando módulos
 
   const express = require('express');
-  const handlebars = require('express-handlebars');
+  const exphbs = require('express-handlebars');
+  const Handlebars = require('handlebars')
+  const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
   const bodyParser = require('body-parser');
   const app = express();
   const admin = require("./routes/admin");
@@ -31,8 +33,19 @@
     app.use(bodyParser.json());
 
   //Handlebars
-    app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+    /*app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+    app.set('view engine', 'handlebars');*/
+
+    const hbs = exphbs.create({
+      defaultLayout: 'main', 
+      extname: 'handlebars',
+      handlebars: allowInsecurePrototypeAccess(Handlebars)
+    });
+
+    app.engine('handlebars', hbs.engine); 
     app.set('view engine', 'handlebars');
+    app.set('views', 'views');
+
 
   //Mongoose
     mongoose.Promise = global.Promise;
