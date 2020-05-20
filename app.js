@@ -11,6 +11,11 @@
   const mongoose = require("mongoose");
   const session = require("express-session");
   const flash = require("connect-flash");
+  require("./models/Postagem");
+  const Postagem = mongoose.model("postagens");
+  require("./models/Categoria");
+  const Categoria = mongoose.model("categorias");
+
   
   
 
@@ -58,12 +63,33 @@
   //Public
     app.use(express.static(path.join(__dirname, "public")));
 
-    app.use((req, res, next) => {
-      console.log("Eu sou um middleware");
-      next();
-    })
-
 //Rotas
+  app.get('/', (req, res) => {
+    Postagem.find().lean().populate("categoria").sort({data: 'desc'}).then((postagens) => {
+      res.render("index", {postagens: postagens})
+    }).catch((err) => {
+      req.flash("error_msg", "Ocorreu um erro interno")
+      res.redirect("/404")
+    })
+  })
+
+  app.get("/postagem/:slug", (req, res) => {
+    Postagem.findOne({slug: req.params.slug}).then((postagem) => {
+      if(postagem) {
+        res.render("postagem/index", {postagem: postagem})
+      } else {
+        req.flash("error_msg", "Esta postagem não existe")
+        res.redirect("/")
+      }
+    }).catch((err) => {
+      req.flash("error_msg", "Ocorreu um erro interno")
+      res.redirect("/")
+    })
+  })
+
+  app.get("/404", (req, res) => {
+    res.send("Erro 404")
+  })
 
   app.use('/admin', admin);
 
